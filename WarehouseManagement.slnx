@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="WarehouseManagement.Data/WarehouseManagement.Data.csproj" Id="bd25182c-3f32-4a47-acfd-f3a38a84d3f4" />
+  <Project Path="WarehouseManagement.Tests/WarehouseManagement.Tests.csproj" Id="0393d952-c1f8-4d44-a94d-162189c5339d" />
   <Project Path="WarehouseManagement/WarehouseManagement.csproj" />
 </Solution>

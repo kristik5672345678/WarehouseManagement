@@ -1,0 +1,102 @@
+﻿<UserControl x:Class="WarehouseManagement.Controls.UserControllWareHouses"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WarehouseManagement.Controls"
+             xmlns:local1="clr-namespace:WarehouseManagement.Controls.Helpers"
+             xmlns:local0="clr-namespace:WarehouseManagement"
+             mc:Ignorable="d"
+             Height="500" Width="999">
+    <UserControl.Resources>
+        <DataTemplate x:Key="listTemplate">
+            <StackPanel Margin="4">
+                <TextBlock FontFamily="Verdana" FontSize="14" Text="{Binding Path=WhName}" HorizontalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+        <local1:PriceConverter x:Key="PriceConv"/>
+        <local1:DiscountBackgroundConverter x:Key="BgConv" />
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="local0:WindowCommands.WhAdd" 
+                        Executed="WhAdd_Executed"
+                        CanExecute="WhAdd_CanExecute"/>
+        <CommandBinding Command="local0:WindowCommands.WhEdit" 
+                        Executed="WhEdit_Executed"
+                        CanExecute="WhEdit_CanExecute"/>
+        <CommandBinding Command="local0:WindowCommands.WhDelete" 
+                        Executed="WhDelete_Executed"
+                        CanExecute="WhDelete_CanExecute"/>
+    </UserControl.CommandBindings>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ListBox x:Name="lbxWhList" Grid.Column="0"
+        ItemTemplate="{StaticResource listTemplate}" SelectionChanged="lbxWhList_SelectionChanged" >
+            <ListBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Новый склад" Command="local0:WindowCommands.WhAdd"
+                              CommandTarget="{Binding PlacementTarget,
+                          RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                    <MenuItem Header="Изменить склад" Command="local0:WindowCommands.WhEdit"
+                              CommandTarget="{Binding PlacementTarget,
+                          RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                    <MenuItem Header="Удалить склад" Command="local0:WindowCommands.WhDelete"
+                              CommandTarget="{Binding PlacementTarget,
+                          RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                </ContextMenu>
+            </ListBox.ContextMenu>
+        </ListBox>
+        <GridSplitter Grid.Column="1" ShowsPreview="False" Width="3" 
+                  HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+        <DockPanel Grid.Column="2">
+            <Grid Margin="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                    <TextBlock Text="Поиск: " VerticalAlignment="Center" Margin="0 0 0 0"/>
+                    <TextBox x:Name="TxtSearch" Width="250" TextChanged="TxtSearch_TextChanged" Margin="0 0 0 0" />
+                </StackPanel>
+
+                <DataGrid x:Name="DgProducts" AutoGenerateColumns="False" IsReadOnly="True" 
+                      SelectionMode="Single" Grid.Row="1" MouseDoubleClick="DgProducts_MouseDoubleClick" 
+                      ItemsSource="{Binding}">
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="{Binding Converter={StaticResource BgConv}}" />
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Фото" Width="60">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding PhotoPath, TargetNullValue={x:Null}}" Width="50" Height="50" Stretch="Uniform" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Haименование" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Kaтeгopия" Binding="{Binding Category.Name}" Width="100" />
+                        <DataGridTextColumn Header="Пpроизводитель" Binding="{Binding Manufacturer.Name}" Width="120" />
+                        <DataGridTextColumn Header="Пocтавщик" Binding="{Binding Supplier.Name}" Width="100"/>
+                        <DataGridTemplateColumn Header="Цeнa" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Price,Converter={StaticResource PriceConv}}" TextWrapping="Wrap" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="Остаток" Binding="{Binding StockQuantity}" Width="70"/>
+                        <DataGridTextColumn Header="Скидка %" Binding="{Binding DiscountPercent}" Width="90" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</UserControl>
