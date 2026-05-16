@@ -1,0 +1,14 @@
+# Visual Studio
+.vs/
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+
+# Файлы резервных копий
+*~
+*.bak
+*.tmp
+*.log
